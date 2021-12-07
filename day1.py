@@ -3,8 +3,8 @@ from timeit import default_timer as timer
 
 if __name__=="__main__":
     start = timer()
-    inp = np.loadtxt('inputs/day1.txt','i4')
-    
+    with open('inputs/day1.txt','r') as f:
+        inp = np.array(f.readlines()).astype(int)
     # Part 1
     print(f'Result part1: {(inp[:-1] < inp[1:]).sum()}')
     
