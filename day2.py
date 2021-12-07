@@ -1,11 +1,15 @@
 from timeit import default_timer as timer
-import pandas as pd
+import numpy as np
 
 if __name__=="__main__":
     start = timer()
     horiz,depth= (0,0)
-    input = pd.read_csv('inputs/day2.txt',delimiter=' ',names=[',inst','val'])
-    for (inst,val) in input.values:
+    input = []
+    with open('inputs/day2.txt') as f:
+        while (line := f.readline()):
+            line = line.split(' ')
+            input.append((line[0],int(line[1]))) 
+    for (inst,val) in input:
         if inst == 'forward':
             horiz += val
         elif inst == 'down':
@@ -15,7 +19,7 @@ if __name__=="__main__":
     print(f'Result part 1: {horiz*depth}')
 
     horiz,depth,aim = (0,0,0)
-    for (inst,val) in input.values:
+    for (inst,val) in input:
         if inst == 'forward':
             horiz += val
             depth += val*aim
