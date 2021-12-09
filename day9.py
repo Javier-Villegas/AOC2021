@@ -36,7 +36,7 @@ def part2(m,pits):
         for col in range(m.shape[1]):
             if pits[row,col] and not checked[row,col]:
                 res.append(add_rm_ady(m,checked,row,col))
-    print(sorted(res)) 
+
     return np.multiply.reduce(sorted(res,reverse=True)[0:3])
 if __name__=='__main__':
 
