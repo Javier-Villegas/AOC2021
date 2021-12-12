@@ -33,7 +33,6 @@ def part2(tunnels:dict) -> list[list]:
                             building.append([False]+p[1:]+[wayout])
                         else:
                             building.append(p+[wayout])
-
     return res
 
 if __name__=='__main__':
