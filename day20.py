@@ -1,19 +1,20 @@
 from timeit import default_timer as timer
 import numpy as np
-
+from numba import njit, prange
+@njit(parallel=True)
 def denoise(img,e_alg):
     ki = [-1,0,1]
     kj = [-1,0,1]
-    new_img = np.zeros((img.shape[0]+2,img.shape[1]+2),dtype=int)
-    new_img = new_img+int(e_alg[-1]=='#') if img[0,0] else new_img+int(e_alg[0]=='#')
-    for i in range(1,img.shape[0]-1):
+    new_img = np.zeros((img.shape[0]+2,img.shape[1]+2),dtype=np.bool_)
+    new_img = new_img+e_alg[-1] if img[0,0] else new_img+e_alg[0]
+    for i in prange(1,img.shape[0]-1):
         for j in range(1,img.shape[1]-1):
             code = 0
             for k_i in range(3):
                 for k_j in range(3):
                     if img[i+ki[k_i],j+kj[k_j]]:
                         code += 2**(8-(k_i*3+k_j))
-            new_img[i+1,j+1] = e_alg[code]=='#'
+            new_img[i+1,j+1] = e_alg[code]
     return new_img
 
 if __name__=='__main__':
@@ -21,7 +22,7 @@ if __name__=='__main__':
 
     with open('inputs/day20.txt','r') as f:
         pixels = f.readlines()
-    e_alg = list(pixels[0][:-1])
+    e_alg = (np.array(list(pixels[0][:-1]))=='#')
     img = np.zeros((len(pixels[2:])+4,len(pixels[2][:-1])+4),dtype=int)
 
     img[2:-2,2:-2] = [[x=='#' for x in y[:-1]] for y in pixels[2:]]
