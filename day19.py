@@ -135,6 +135,7 @@ if __name__=='__main__':
     known_scanner = [0]
     beacons = list()
     new_scan = True
+    positions = []
     while len(known_scanner)!=len(scanners):
         new_scan = False
         for j,s1 in enumerate(scanners):
@@ -147,6 +148,7 @@ if __name__=='__main__':
                 (scanners[i],pos) = search_base(s1,s2)
                 if pos:
                     known_scanner.append(i)
+                    positions.append(pos)
     for j,s1 in enumerate(scanners):
         for i,s2 in enumerate(scanners[1:]):
             i+=1
@@ -155,7 +157,6 @@ if __name__=='__main__':
             (_,pos) = search_base(s1,s2)
             if pos:
                 known_scanner.append(i)
-                new_scan = True
         #if base != ([],[]):
         #    base_transform[i+1] = base
     #print(beacons)
@@ -167,3 +168,11 @@ if __name__=='__main__':
             if s not in res:
                 res.append(s)
     print(len(res))
+    maxd = 0
+    for p1 in positions:
+        for p2 in positions:
+            aux = abs(p1[0]-p2[0])+abs(p1[1]-p2[1])+abs(p1[2]-p2[2])
+            if aux > maxd:
+                maxd = aux
+
+    print(maxd)
