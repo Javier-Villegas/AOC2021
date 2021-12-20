@@ -1,23 +1,4 @@
 from timeit import default_timer as timer
-from itertools import product
-#import numpy as np
-def transform_rotation(r1,r2) -> list:
-    r = [1,2,3]
-    r_new = [0,0,0]
-    for i in range(3):
-        if r1[i] < 0:
-            ri = -r2[abs(r1[i])-1]
-            if ri < 0:
-                r_new[i] = -r[abs(ri)-1]
-            else:
-                r_new[i] = r[ri-1]
-        else:
-            ri = r2[r1[i]-1]
-            if ri < 0:
-                r_new[i] = -r[abs(ri)-1]
-            else:
-                r_new[i] = r[ri-1]
-    return r
 
 def search_base(scanner1,scanner2) -> (list,list):
     found = False
@@ -54,21 +35,13 @@ def search_base(scanner1,scanner2) -> (list,list):
                         rot = r                                #return ((c1,c2,c3),r)
                 else:
                     possible_bases[(c1,c2,c3)]= [[s1],1,r]
-    #print(possible_bases[(c1,c2,c3)][2])
-    #[print(transform(s,[(c1,c2,c3),possible_bases[(c1,c2,c3)][2]])) for s in scanner2]
     new_scanner = scanner2
+
     if found:
         new_scanner = []
-        #print('AAAA')
-        #print(pos)
-        #print(rot)
         for s2 in scanner2:
             s2 = transform(s2,[pos,rot])
             new_scanner.append(s2)
-        #print("BBB")
-        #print(scanner2)
-        #print(new_scanner)
-        #print("CCC")
     return (new_scanner,pos)
 
 
@@ -133,7 +106,6 @@ if __name__=='__main__':
     scanners.pop()
 
     known_scanner = [0]
-    beacons = list()
     new_scan = True
     positions = []
     while len(known_scanner)!=len(scanners):
@@ -157,17 +129,12 @@ if __name__=='__main__':
             (_,pos) = search_base(s1,s2)
             if pos:
                 known_scanner.append(i)
-        #if base != ([],[]):
-        #    base_transform[i+1] = base
-    #print(beacons)
-    #print(len(beacons))
-    #print(known_scanner)
-    res = []
+    beacons = []
     for i in scanners:
         for s in i:
-            if s not in res:
-                res.append(s)
-    print(len(res))
+            if s not in beacons:
+                beacons.append(s)
+    print(f'Result part 1: {len(beacons)}')
     maxd = 0
     for p1 in positions:
         for p2 in positions:
@@ -175,4 +142,5 @@ if __name__=='__main__':
             if aux > maxd:
                 maxd = aux
 
-    print(maxd)
+    print(f'Result part 2: {maxd}')
+    print(f'Elapsed time: {timer()-start} seconds')
