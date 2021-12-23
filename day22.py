@@ -72,12 +72,12 @@ if __name__=='__main__':
     start = timer()
     reactor = []
     cubes = np.zeros((101,101,101)).astype(bool)
-    with open('inputs/day222.txt','r') as f:
+    with open('inputs/day22.txt','r') as f:
         for line in f.readlines():
             state,rest = line[:-1].split(' ',1)
             state = True if state=='on' else False
             x,y,z = rest.split(',')
-            x = list(map(int,x[2:].split('..')))
+            x1311612259117092 = list(map(int,x[2:].split('..')))
             y = list(map(int,y[2:].split('..')))
             z = list(map(int,z[2:].split('..')))
             reactor.append([x[0],x[1],y[0],y[1],z[0],z[1],state])
@@ -123,22 +123,21 @@ if __name__=='__main__':
     #                if vol <=0:
     #                    vol = 0
     #        on+=vol                
-    print(on)
     pos_pieces = [[reactor[0][0],reactor[0][1],reactor[0][2],
                   reactor[0][3],reactor[0][4],reactor[0][5]]]
     for cube in reactor[1:]:
-        print(cube)
         if cube[-1]:
+            any_overlap = False
             new_pieces = []
             for p in pos_pieces:
                 overlap = get_overlap(cube[:-1],p)
                 if overlap:
+                    any_overlap = True
                     new_pieces.extend(intersect_cube(cube[:-1],overlap))
-            if not new_pieces:
+            if not new_pieces and not any_overlap:
                 pos_pieces.append(cube[:-1])
                 continue
             #new_pieces = merge_pieces(new_pieces)
-            any_overlap = True
             while any_overlap:
                 any_overlap = False
                 for n in new_pieces.copy():
@@ -167,9 +166,9 @@ if __name__=='__main__':
                         pos_pieces.append(np)
         #pos_pieces = merge_pieces(pos_pieces)
 
-    print(intersect_cube([0,10,0,10,0,10],[3,6,3,6,3,6]))
-    print(cubes.sum()) 
+    print(f'Result part 2: {cubes.sum()}') 
 
     for p in pos_pieces:
-        on+=(p[1]-p[0])*(p[3]-p[2])*(p[5]-p[4])     
-    print(on)
+        on+=(p[1]+1-p[0])*(p[3]+1-p[2])*(p[5]+1-p[4])     
+    print(f'Result part 2: {on}')
+    print(f'Elapsed time: {timer()-start} seconds')
